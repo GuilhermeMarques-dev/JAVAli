@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cliente {
     private String nome;
@@ -14,7 +15,7 @@ public class Cliente {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.id_registro = id_registro;
-        this.bilhetes = new ArrayList<>;
+        this.bilhetes = new ArrayList<>();
     }
 
     public String getNome() {
@@ -43,7 +44,7 @@ public class Cliente {
         double total = 0;
 
         for (Bilhete b: bilhetes ) {
-            total += bilhetes.getValor();
+            total += b.calcularValor();
         }
 
         return total;

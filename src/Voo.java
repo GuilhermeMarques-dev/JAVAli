@@ -13,7 +13,7 @@ public class Voo {
         this.rota = rota;
         this.data = data;
         this.precoBase = precoBase;
-        this.codigo = rota.getCodigo();
+        this.codigo = rota.gerarCodigo();
         this.assentosOcupados = 0;
     }
 

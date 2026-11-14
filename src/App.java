@@ -1,0 +1,177 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+    /*
+    Aluno 1)
+    - Mostrar menu de Usuario
+    - Gerar automaticamente as rotas da cidade
+    */
+
+
+
+    /*
+    Aluno 2)
+    - Fazer loop principal no main
+    - Procurar voos
+    */ 
+
+
+
+
+    /*
+    Aluno 3)
+    - Cadastrar cliente
+    - Gerar bilhete
+    */
+
+
+
+
+    /*
+    Aluno 4)
+    - Cadastrar voos
+    - Comprar bilhete
+    */
+    public static Voo cadastrarVoo(Scanner sc, List<Rota> rotas, List<Voo> voos) {
+        if (rotas == null || rotas.isEmpty()) {
+            System.out.println("Nenhuma rota cadastrada para criar um voo.");
+            return null;
+        }
+
+        System.out.println("\n=== CADASTRAR VOO ===");
+        System.out.println("Rotas disponíveis:");
+        for (int i = 0; i < rotas.size(); i++) {
+            Rota r = rotas.get(i);
+            System.out.println((i + 1) + " - " + r.getOrigem().getNomeCidade()
+                    + " -> " + r.getDestino().getNomeCidade()
+                    + " (Código: " + r.gerarCodigo() + ")");
+        }
+
+        System.out.print("Escolha o número da rota: ");
+        int indiceRota = Integer.parseInt(sc.nextLine()) - 1;
+        if (indiceRota < 0 || indiceRota >= rotas.size()) {
+            System.out.println("Rota inválida!");
+            return null;
+        }
+        Rota rotaEscolhida = rotas.get(indiceRota);
+
+        LocalDate dataVoo = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        while (dataVoo == null) {
+            System.out.print("Digite a data do voo (dd/MM/yyyy): ");
+            String dataStr = sc.nextLine();
+            try {
+                dataVoo = LocalDate.parse(dataStr, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de data inválido! Use dd/MM/yyyy.");
+            }
+        }
+
+        System.out.print("Digite o preço base do voo: R$ ");
+        double precoBase = Double.parseDouble(sc.nextLine().replace(",", "."));
+
+        Voo novoVoo = new Voo(rotaEscolhida, dataVoo, precoBase);
+        voos.add(novoVoo);
+
+        System.out.println("Voo cadastrado com sucesso! Código: " + novoVoo.getCodigo());
+        return novoVoo;
+    }
+
+    public static void comprarBilhete(Scanner sc, List<Cliente> clientes, List<Voo> voos) {
+        if (clientes == null || clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado.");
+            return;
+        }
+        if (voos == null || voos.isEmpty()) {
+            System.out.println("Nenhum voo disponível.");
+            return;
+        }
+
+        System.out.println("\n=== COMPRAR BILHETE ===");
+        System.out.print("Informe o ID de registro do cliente: ");
+        int idCliente = Integer.parseInt(sc.nextLine());
+
+        Cliente clienteEscolhido = null;
+        for (Cliente c : clientes) {
+            if (c.getId_registro() == idCliente) {
+                clienteEscolhido = c;
+                break;
+            }
+        }
+
+        if (clienteEscolhido == null) {
+            System.out.println("Cliente não encontrado!");
+            return;
+        }
+
+        Bilhete bilhete = new Bilhete(clienteEscolhido);
+        boolean adicionandoVoos = true;
+
+        while (adicionandoVoos) {
+            System.out.println("\nVoos disponíveis:");
+            for (int i = 0; i < voos.size(); i++) {
+                Voo v = voos.get(i);
+                System.out.println((i + 1) + " - Código: " + v.getCodigo()
+                        + " | " + v.getRota().getOrigem().getNomeCidade()
+                        + " -> " + v.getRota().getDestino().getNomeCidade()
+                        + " | Data: " + v.getData()
+                        + " | Preço: R$ " + String.format("%.2f", v.getPrecoBase())
+                        + " | Vagas: " + v.getVagasDisponiveis());
+            }
+
+            System.out.print("Escolha o número do voo para adicionar ao bilhete (ou 0 para finalizar): ");
+            int opcaoVoo = Integer.parseInt(sc.nextLine());
+
+            if (opcaoVoo == 0) {
+                break;
+            }
+
+            int indiceVoo = opcaoVoo - 1;
+            if (indiceVoo < 0 || indiceVoo >= voos.size()) {
+                System.out.println("Opção de voo inválida!");
+                continue;
+            }
+
+            Voo vooEscolhido = voos.get(indiceVoo);
+            if (!vooEscolhido.temVaga()) {
+                System.out.println("Este voo não possui vagas disponíveis!");
+                continue;
+            }
+
+            if (bilhete.adicionarVoo(vooEscolhido)) {
+                vooEscolhido.reservarAssento();
+                System.out.println("Voo adicionado ao bilhete com sucesso!");
+            } else {
+                System.out.println("Não foi possível adicionar este voo (verifique conexão de origem/destino e datas).");
+            }
+
+            System.out.print("Deseja adicionar outro voo (conexão) a este bilhete? (S/N): ");
+            String continuar = sc.nextLine().trim();
+            if (!continuar.equalsIgnoreCase("S")) {
+                adicionandoVoos = false;
+            }
+        }
+
+        if (bilhete.getOrigem() != null) {
+            comprarBilhete(clienteEscolhido, bilhete);
+        } else {
+            System.out.println("Nenhum voo foi adicionado. Compra cancelada.");
+        }
+    }
+
+    public static void comprarBilhete(Cliente cliente, Bilhete bilhete) {
+        if (cliente == null || bilhete == null) {
+            System.out.println("Cliente ou bilhete inválido.");
+            return;
+        }
+        cliente.comprarBilhete(bilhete);
+        System.out.println("\nCompra concluída com sucesso!");
+        System.out.println("Bilhete nº: " + bilhete.getNumero());
+        System.out.println("Cliente: " + cliente.getNome() + " " + cliente.getSobrenome());
+        System.out.println("Valor final do bilhete: R$ " + String.format("%.2f", bilhete.calcularValor()));
+    }
+}

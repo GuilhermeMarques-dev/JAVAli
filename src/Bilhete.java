@@ -27,7 +27,7 @@ public class Bilhete {
 
         Voo ultimo = voos.get(voos.size() - 1);
 
-        boolean conecta = v.getOrigem().equals(ultimo.getDestino());
+        boolean conecta = v.getRota().getOrigem().equals(ultimo.getRota().getDestino());
 
         LocalDate dataUltimo = ultimo.getData();
         LocalDate dataNovo = v.getData();
@@ -46,7 +46,7 @@ public class Bilhete {
             return 0.0;
         }
         if (voos.size() == 1) {
-            return voos.get(0).getPreco();
+            return voos.get(0).getPrecoBase();
         }
 
         double maior = 0;
@@ -54,7 +54,7 @@ public class Bilhete {
         double soma = 0;
 
         for (Voo v : voos) {
-            double preco = v.getPreco();
+            double preco = v.getPrecoBase();
             soma += preco;
 
             if (preco > maior) {
@@ -69,19 +69,19 @@ public class Bilhete {
         return maior * 0.60 + segundo * 0.40 + restantes * 0.10;
     }
 
-    public Cidade getOrigem(){
+    public ECidade getOrigem(){
         if (voos.isEmpty()) {
             return null;
         }
-        return voos.get(0).getOrigem();
+        return voos.get(0).getRota().getOrigem();
     }
 
-    public Cidade getDestino(){
+    public ECidade getDestino(){
         if (voos.isEmpty()) {
             return null;
         }
         Voo ultimo = voos.get(voos.size() - 1);
-        return ultimo.getDestino();
+        return ultimo.getRota().getDestino();
     }
 
     public int getNumero() {
