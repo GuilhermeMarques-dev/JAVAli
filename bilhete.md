@@ -1,3 +1,0 @@
-BILETE
-
-- voos: LinkedList
