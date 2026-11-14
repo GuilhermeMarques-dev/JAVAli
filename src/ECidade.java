@@ -1,6 +1,6 @@
-package enums;
 
-public enum Cidade {
+
+public enum ECidade {
     BH("Belo Horizonte", 31),
     FORTAL("Fortaleza", 85),
     RECIFE("Recife", 81),
@@ -11,7 +11,7 @@ public enum Cidade {
     private final String nomeCidade;
     private final int ddd;
 
-    private Cidade(String nome, int ddd){
+    private ECidade(String nome, int ddd){
         this.nomeCidade = nome;
         this.ddd = ddd;
     }

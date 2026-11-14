@@ -1,12 +1,8 @@
-package entities;
-
-import enums.Cidade;
-
 public class Rota{
-    private Cidade origem, destino;
+    private ECidade origem, destino;
     private String codigo;
 
-    public Rota(Cidade origem, Cidade destino, int codigo){
+    public Rota(ECidade origem, ECidade destino, int codigo){
 
         if(origem == null){
             throw new IllegalArgumentException("Cidade de origem inexistente");
@@ -14,11 +10,7 @@ public class Rota{
 
         if(destino == null){
             throw new IllegalArgumentException("Cidade de destino inexistente");
-        } 
-
-        if(destino == null){
-            throw new IllegalArgumentException("Código inválido");
-        } 
+        }
 
         if(origem.equals(destino)){
             throw new IllegalArgumentException("A cidade não pode ser igual ao destino.");
@@ -28,11 +20,11 @@ public class Rota{
         this.destino = destino;
     }
 
-    public Cidade getOrigem(){
+    public ECidade getOrigem(){
         return this.origem;
     }
 
-    public Cidade getDestino(){
+    public ECidade getDestino(){
         return this.destino;
     }
 
