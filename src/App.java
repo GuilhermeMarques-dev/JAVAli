@@ -1,17 +1,44 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    /*
-    Aluno 1)
-    - Mostrar menu de Usuario
-    - Gerar automaticamente as rotas da cidade
-    */
 
+   public static int mostrarMenu(Scanner sc) {
+        System.out.println("\n=========== Menu - Agência de Viagens ===========");
+        System.out.println("1 - Cadastrar cliente");
+        System.out.println("2 - Cadastrar voo");
+        System.out.println("3 - Procurar voos");
+        System.out.println("4 - Comprar bilhete");
+        System.out.println("5 - Relatório: dados de um cliente");
+        System.out.println("6 - Relatório: bilhetes vendidos por origem");
+        System.out.println("7 - Relatório: total arrecadado e comissão");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opção: ");
 
+        try {
+            return Integer.parseInt(sc.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static List<Rota> gerarRotas() {
+        List<Rota> rotas = new ArrayList<>();
+
+        for (ECidade origem : ECidade.values()) {
+            for (ECidade destino : ECidade.values()) {
+                if (origem != destino) {
+                    rotas.add(new Rota(origem, destino, 0));
+                }
+            }
+        }
+
+        return rotas;
+    }
 
     /*
     Aluno 2)
