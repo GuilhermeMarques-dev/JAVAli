@@ -1,12 +1,11 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-
-    private List<Cliente> clientes;
 
     /*
     Aluno 1)
@@ -14,7 +13,38 @@ public class App {
     - Gerar automaticamente as rotas da cidade
     */
 
+    public static int mostrarMenu(Scanner sc) {
+        System.out.println("\n=========== Menu - Agência de Viagens ===========");
+        System.out.println("1 - Cadastrar cliente");
+        System.out.println("2 - Cadastrar voo");
+        System.out.println("3 - Procurar voos");
+        System.out.println("4 - Comprar bilhete");
+        System.out.println("5 - Relatório: dados de um cliente");
+        System.out.println("6 - Relatório: bilhetes vendidos por origem");
+        System.out.println("7 - Relatório: total arrecadado e comissão");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opção: ");
 
+        try {
+            return Integer.parseInt(sc.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static List<Rota> gerarRotas() {
+        List<Rota> rotas = new ArrayList<>();
+
+        for (ECidade origem : ECidade.values()) {
+            for (ECidade destino : ECidade.values()) {
+                if (origem != destino) {
+                    rotas.add(new Rota(origem, destino, 0));
+                }
+            }
+        }
+
+        return rotas;
+    }
 
     /*
     Aluno 2)
@@ -30,14 +60,18 @@ public class App {
     - Cadastrar cliente
     - Gerar bilhete
     */
-    public void cadastrarCliente(String nome, String sobrenome, int id){
-
-        Cliente novo = new Cliente(nome, sobrenome, id);
-        clientes.add(novo);
-
+    public static void cadastrarCliente(Scanner sc, List<Cliente> clientes) {
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+        System.out.print("Sobrenome: ");
+        String sobrenome = sc.nextLine();
+        System.out.print("ID de registro: ");
+        int id = Integer.parseInt(sc.nextLine());
+        clientes.add(new Cliente(nome, sobrenome, id));
+        System.out.println("Cliente cadastrado.");
     }
 
-    public Bilhete gerarBilhete(Cliente cliente, List<Voo> voos){
+    public static Bilhete gerarBilhete(Cliente cliente, List<Voo> voos) {
 
         Bilhete novo = new Bilhete(cliente);
 
