@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
+
+    private List<Cliente> clientes;
+
     /*
     Aluno 1)
     - Mostrar menu de Usuario
@@ -27,7 +30,24 @@ public class App {
     - Cadastrar cliente
     - Gerar bilhete
     */
+    public void cadastrarCliente(String nome, String sobrenome, int id){
 
+        Cliente novo = new Cliente(nome, sobrenome, id);
+        clientes.add(novo);
+
+    }
+
+    public Bilhete gerarBilhete(Cliente cliente, List<Voo> voos){
+
+        Bilhete novo = new Bilhete(cliente);
+
+        for(Voo voo : voos){
+            novo.adicionarVoo(voo);
+        }
+
+        return novo;
+
+    }
 
 
 
