@@ -50,10 +50,74 @@ public class App {
     Aluno 2)
     - Fazer loop principal no main
     - Procurar voos
-    */ 
+    */
 
+    public static void procurarVoo(Scanner sc, List<Rota> rotas, List<Voo> voos) {
+        IO.println("\n=== PROCURAR VOOS ===");
 
+        if (voos == null || voos.isEmpty()) {
+            IO.println("Nenhum voo cadastrado no sistema.");
+            return;
+        }
+        if (rotas == null || rotas.isEmpty()) {
+            IO.println("Nenhuma rota disponível.");
+            return;
+        }
 
+        IO.println("Rotas:");
+        for (int i = 0; i < rotas.size(); i++) {
+            Rota r = rotas.get(i);
+            IO.println((i + 1) + " - " + r.getOrigem().getNomeCidade()
+                    + " -> " + r.getDestino().getNomeCidade()
+                    + " (Código: " + r.gerarCodigo() + ")");
+        }
+
+        IO.print("Escolha o número da rota: ");
+        int indiceRota = Integer.parseInt(sc.nextLine()) - 1;
+        if (indiceRota < 0 || indiceRota >= rotas.size()) {
+            IO.println("Rota inválida!");
+            return;
+        }
+        Rota rotaFiltro = rotas.get(indiceRota);
+
+        boolean encontrou = false;
+        for (Voo v : voos) {
+            Rota rotaVoo = v.getRota();
+            if (rotaVoo.getOrigem() == rotaFiltro.getOrigem()
+                    && rotaVoo.getDestino() == rotaFiltro.getDestino()) {
+                encontrou = true;
+                IO.println("Código: " + v.getCodigo()
+                        + " | Data: " + v.getData()
+                        + " | Preço: R$ " + String.format("%.2f", v.getPrecoBase())
+                        + " | Vagas: " + v.getVagasDisponiveis());
+            }
+        }
+
+        if (!encontrou) {
+            IO.println("Nenhum voo encontrado para esta rota.");
+        }
+    }
+
+    public static void main() {
+        Scanner sc = new Scanner(System.in);
+        List<Rota> rotas = gerarRotas();
+        List<Voo> voos = new ArrayList<>();
+        List<Cliente> clientes = new ArrayList<>();
+
+        int opcao;
+        do {
+            opcao = mostrarMenu(sc);
+            switch (opcao) {
+                case 2 -> cadastrarVoo(sc, rotas, voos);
+                case 3 -> procurarVoo(sc, rotas, voos);
+                case 4 -> comprarBilhete(sc, clientes, voos);
+                case 0 -> IO.println("Encerrando o sistema. Até logo!");
+                default -> IO.println("Opção inválida. Tente novamente.");
+            }
+        } while (opcao != 0);
+
+        sc.close();
+    }
 
     /*
     Aluno 3)
