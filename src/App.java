@@ -124,16 +124,32 @@ public class App {
     Aluno 3)
     - Cadastrar cliente
     - Gerar bilhete
+    (foi utilizado ferramente de IA para a correção do método e permitir apenas texto nos nomes e sobrenomes )
+
     */
     public static void cadastrarCliente(Scanner sc, List<Cliente> clientes) {
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
-        System.out.print("Sobrenome: ");
-        String sobrenome = sc.nextLine();
-        System.out.print("ID de registro: ");
-        int id = Integer.parseInt(sc.nextLine());
-        clientes.add(new Cliente(nome, sobrenome, id));
-        System.out.println("Cliente cadastrado.");
+        String nome = lerApenasTexto(sc, "Nome: ");
+        String sobrenome = lerApenasTexto(sc, "Sobrenome: ");
+
+        Cliente novo = new Cliente(nome, sobrenome);
+        clientes.add(novo);
+        System.out.println("Cliente cadastrado. ID de registro: " + novo.getId_registro());
+    }
+
+    private static String lerApenasTexto(Scanner sc, String rotulo) {
+        while (true) {
+            System.out.print(rotulo);
+            String texto = sc.nextLine().trim();
+            if (texto.isEmpty()) {
+                System.out.println("Valor obrigatório.");
+                continue;
+            }
+            if (!texto.matches("[\\p{L} ]+")) {
+                System.out.println("Use apenas letras (sem números ou símbolos).");
+                continue;
+            }
+            return texto;
+        }
     }
 
     public static Bilhete gerarBilhete(Cliente cliente, List<Voo> voos) {

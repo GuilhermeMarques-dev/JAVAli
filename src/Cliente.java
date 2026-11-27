@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
+    private static int proximoIdRegistro = 1;
+
     private String nome;
     private String sobrenome;
     private int id_registro;
@@ -11,11 +13,21 @@ public class Cliente {
         this.bilhetes = new ArrayList<>();
     }
 
+    public Cliente(String nome, String sobrenome) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.id_registro = proximoIdRegistro++;
+        this.bilhetes = new ArrayList<>();
+    }
+
     public Cliente(String nome, String sobrenome, int id_registro) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.id_registro = id_registro;
         this.bilhetes = new ArrayList<>();
+        if (id_registro >= proximoIdRegistro) {
+            proximoIdRegistro = id_registro + 1;
+        }
     }
 
     public String getNome() {
