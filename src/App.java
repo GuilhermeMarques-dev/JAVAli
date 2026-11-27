@@ -108,6 +108,7 @@ public class App {
         do {
             opcao = mostrarMenu(sc);
             switch (opcao) {
+                case 1 -> cadastrarCliente(sc, clientes);
                 case 2 -> cadastrarVoo(sc, rotas, voos);
                 case 3 -> procurarVoo(sc, rotas, voos);
                 case 4 -> comprarBilhete(sc, clientes, voos);
